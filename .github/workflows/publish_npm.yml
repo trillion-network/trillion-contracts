@@ -1,0 +1,42 @@
+name: Publish Package to NPM
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: true
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Install Foundry so we can generate ABIs
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      # Generate ABIs
+      - name: Run Forge build
+        run: forge build
+
+      # Setup Node so we can generate TypeScript types
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@trillion-x"
+
+      # Publish ABIs to NPM
+      - name: Publish to NPM
+        run: |
+          yarn config set version-git-tag false
+          yarn version --new-version $(git describe --tags)
+          yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
