@@ -1,4 +1,4 @@
-name: test
+name: test-via-ir
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
 
-    name: forge test
+    name: forge test via IR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
           forge build --sizes
         id: build
 
-      - name: Run Forge tests
+      - name: Run Forge tests (via IR)
         run: |
-          forge test -vvv
+          forge test -vvv --via-ir
         id: test

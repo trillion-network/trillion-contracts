@@ -1,4 +1,4 @@
-name: test
+name: fmt
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
 
-    name: forge test
+    name: forge fmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,13 +33,7 @@ jobs:
         with:
           version: nightly
 
-      - name: Run Forge build
+      - name: Run Forge fmt
         run: |
-          forge --version
-          forge build --sizes
-        id: build
-
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+          forge fmt --check
+        id: fmt

@@ -12,3 +12,13 @@ docs/
 
 # Dotenv file
 .env
+
+# Node modules
+node_modules/
+
+# DS Store files
+**/.DS_Store
+
+# coverage stuff
+coverage/
+lcov.info

@@ -1,0 +1,21 @@
+{
+  "name": "@trillion-x/trillion-contracts",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "repository": "git@github.com:royal-markets/royal-contracts.git",
+  "files": [
+    "out",
+    "ts-types"
+  ],
+  "scripts": {
+    "lint": "solhint 'src/**/*.sol' && solhint --config .solhint.test.json 'test/**/*.sol'",
+    "test": "forge test",
+    "coverage": "forge coverage --report lcov && lcov --remove ./lcov.info -o ./lcov.info 'script' && genhtml lcov.info --branch-coverage --output-dir coverage && open coverage/index.html"
+  },
+  "devDependencies": {
+    "solhint": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=20.5.0"
+  }
+}

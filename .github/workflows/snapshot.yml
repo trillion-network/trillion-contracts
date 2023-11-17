@@ -1,4 +1,4 @@
-name: test
+name: snapshot
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
 
-    name: forge test
+    name: forge snapshot
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -33,13 +33,10 @@ jobs:
         with:
           version: nightly
 
-      - name: Run Forge build
+      - name: Run Forge snapshot
         run: |
-          forge --version
-          forge build --sizes
-        id: build
-
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+          forge snapshot --check
+        id: snapshot
+        env:
+          # make fuzzing deterministic to keep snapshots consistent
+          FOUNDRY_FUZZ_SEED: 42

@@ -1,0 +1,11 @@
+{
+    "solidity.packageDefaultDependenciesContractsDirectory": "src",
+    "solidity.packageDefaultDependenciesDirectory": "lib",
+    "solidity.compileUsingRemoteVersion": "v0.8.21+commit.d9974bed",
+  
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true
+  }
+  

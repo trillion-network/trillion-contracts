@@ -1,0 +1,86 @@
+name: coverage
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - README.md
+  pull_request:
+    branches: ["*"]
+    paths-ignore:
+      - README.md
+
+env:
+  FOUNDRY_PROFILE: ci
+
+jobs:
+  check:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: true
+
+    name: forge coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install lcov
+        run: sudo apt-get install lcov
+
+      - name: git checkout base branch
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          ref: ${{github.base_ref}}
+
+      - name: Run forge coverage for base branch
+        # Filter out "script" contracts from coverage report
+        run: |
+          forge coverage --report lcov
+          lcov --remove ./lcov.info -o ./${{github.sha}}.lcov.info 'script'
+        id: coverage-base
+
+      - name: Archive base branch code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{github.sha}}.lcov.info
+          path: ./${{github.sha}}.lcov.info
+        id: archive-base
+
+      - name: git checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          ref: ${{github.head_ref}}
+
+      - name: Run forge coverage for head branch
+        # Filter out "script" contracts from coverage report
+        run: |
+          forge coverage --report lcov
+          lcov --remove ./lcov.info -o ./${{github.event.pull_request.base.sha}}.lcov.info 'script'
+        id: coverage-head
+
+      - name: Archive head branch code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{github.event.pull_request.base.sha}}.lcov.info
+          path: ./${{github.event.pull_request.base.sha}}.lcov.info
+        id: archive-head
+
+      - name: Download base branch coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{github.sha}}.lcov.info
+
+      - name: Code Coverage Report
+        uses: romeovs/lcov-reporter-action@4cf015aa4afa87b78238301f1e3dc140ea0e1ec6
+        # The reason for using a hash rather than a version/tag, is the project
+        # failed in publishing this release: https://github.com/romeovs/lcov-reporter-action/issues/47
+        with:
+          lcov-file: ./${{github.event.pull_request.base.sha}}.lcov.info
+          lcov-base: ./${{github.sha}}.lcov.info
+          filter-changed-files: true
+          delete-old-comments: true
