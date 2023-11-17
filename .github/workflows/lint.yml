@@ -27,6 +27,6 @@ jobs:
           node-version: "20"
           cache: "yarn"
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
       - name: Run solhint
         run: yarn lint
