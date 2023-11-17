@@ -31,7 +31,7 @@ jobs:
         run: sudo apt-get install lcov
 
       - name: git checkout base branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           ref: ${{github.base_ref}}
@@ -51,7 +51,7 @@ jobs:
         id: archive-base
 
       - name: git checkout PR branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           ref: ${{github.head_ref}}
