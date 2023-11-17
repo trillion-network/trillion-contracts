@@ -176,7 +176,7 @@ chisel --help
 
 ## Publishing to NPM
 
-To allow other systems in Royal to build on top of these smart contracts, we publish this repository as a private npm package on the npm registry. Only git repositories setup with an NPM Token for the `royal-markets` organization on the npm registry will be able to install it as a dependency.
+To allow other systems in Royal to build on top of these smart contracts, we publish this repository as a private npm package on the npm registry. Only git repositories setup with an NPM Token for the `trillion-x` organization on the npm registry will be able to install it as a dependency.
 
 NOTE: The package does not include the Solidity code - it only includes the ABIs (Application Binary Interface) JSON files. The assumption is that the Dapp is using [ABIType](https://abitype.dev/) directly, or something built on top of it like [viem](https://viem.sh/) - and so it's only necessary to ship the ABIs.
 
