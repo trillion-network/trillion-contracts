@@ -13,7 +13,7 @@
     "coverage": "forge coverage --report lcov && lcov --remove ./lcov.info -o ./lcov.info 'script' && genhtml lcov.info --branch-coverage --output-dir coverage && open coverage/index.html"
   },
   "devDependencies": {
-    "solhint": "^3.6.2"
+    "solhint": "^4.0.0"
   },
   "engines": {
     "node": ">=20.5.0"

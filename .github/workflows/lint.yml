@@ -21,12 +21,12 @@ jobs:
     name: solhint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "yarn"
       - name: Install dependencies
-        run: yarn install --frozen-lockfile # optional, --immutable
+        run: yarn install --immutable
       - name: Run solhint
         run: yarn lint
