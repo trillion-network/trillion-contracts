@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-error DeniedByBlacklist(address account);
+error CallerBlacklisted(address account);
 
 /**
  * @title Blacklistable Token
@@ -25,7 +25,7 @@ contract Blacklistable is AccessControlUpgradeable {
      */
     modifier notBlacklisted(address account) {
         if (_blacklisted[account]) {
-            revert DeniedByBlacklist(account);
+            revert CallerBlacklisted(account);
         }
         _;
     }
