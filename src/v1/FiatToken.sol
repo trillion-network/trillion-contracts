@@ -9,6 +9,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUp
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./Blacklistable.sol";
+import "./Rescuable.sol";
 
 /// @custom:security-contact snggeng@gmail.com
 contract FiatToken is
@@ -19,7 +20,8 @@ contract FiatToken is
     AccessControlUpgradeable,
     ERC20PermitUpgradeable,
     UUPSUpgradeable,
-    Blacklistable
+    Blacklistable,
+    Rescuable
 {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -51,9 +53,6 @@ contract FiatToken is
         _grantRole(UPGRADER_ROLE, upgrader);
     }
 
-    // TODO: add notBlacklisted modifier to mint, burn
-    // TODO: add whenNotPaused to transfer, transferFrom, mint, burn
-
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
     }
@@ -73,6 +72,8 @@ contract FiatToken is
     function _update(address from, address to, uint256 value)
         internal
         override(ERC20Upgradeable, ERC20PausableUpgradeable)
+        notBlacklisted(from)
+        notBlacklisted(to)
     {
         super._update(from, to, value);
     }
