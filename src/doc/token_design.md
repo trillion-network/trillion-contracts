@@ -38,3 +38,19 @@ The `FiatToken` implements the standard methods of the ERC-20 interface with som
 
 * A blacklisted address will be unable to call transfer or transferFrom, and will be unable to receive tokens.
 * transfer, transferFrom, and approve will fail if the contract has been paused.
+
+### Creating and Destroying tokens
+
+The FiatToken contract allows any account with the `MINTER_ROLE` to create and destroy tokens. The controller of these accounts will have to be members of Trillion, and will be vetted by Trillion before they are allowed to create new tokens.
+
+In the future, when we introduce Trillion partners and allow them to assume the `MINTER_ROLE`, we should consider adding a `minterAllowance` that allows Trillion to limit the number of tokens a minter can mint.
+
+### Blacklisting
+
+Addresses can be blacklisted. A blacklisted address will be unable to transfer tokens, mint, or burn tokens.
+
+### Meta transactions compatibility
+
+`FiatToken` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
+
+The `permit` method can be used to change an account’s ERC20 allowance by presenting a message signed by the account. Users may update their ERC-20 allowances by signing a permit message and passing the signed message to a relayer who will execute the on-chain transaction, instead of submitting a transaction themselves.
