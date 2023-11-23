@@ -40,6 +40,10 @@ Install `lcov` if you want to play with code coverage:
 brew install lcov
 ```
 
+### Dependency Updates
+
+We use Dependabot for automated dependency updates. Dependabot scans for updates in our dependencies and auto-creates a PR to upgrade the dependency.
+
 ## Development
 
 ### Build
