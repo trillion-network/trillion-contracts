@@ -1,6 +1,6 @@
 # Trillion's Token Design
 
-Trillion's FiatToken contract is an ERC-20 compatible token. It allows minting/burning of tokens by multiple entities, pausing all activity, freezing of individual addresses, and a way to upgrade the contract so that bugs can be fixed or features added without downtime.
+Trillion's FiatTokenV1 contract is an ERC-20 compatible token. It allows minting/burning of tokens by multiple entities, pausing all activity, freezing of individual addresses, and a way to upgrade the contract so that bugs can be fixed or features added without downtime.
 
 ## Upgradeability
 
@@ -16,14 +16,14 @@ User ---- tx ---> Proxy ----------> Implementation_v0
 
 We use OpenZeppelin's [Upgrades Plugin](https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades) to deploy our contracts, which runs upgrade safety checks by default during deployments and upgrades.
 
-The proxy contract is a [`ERC1967Proxy`](https://eips.ethereum.org/EIPS/eip-1967) which gets deployed as part of the `Deploy.s.sol` script. `FiatToken` is the logic contract which contains the implementation.
+The proxy contract is a [`ERC1967Proxy`](https://eips.ethereum.org/EIPS/eip-1967) which gets deployed as part of the `Deploy.s.sol` script. `FiatTokenV1` is the logic contract which contains the implementation.
 
 ## Roles
 
-The `FiatToken` has a number of roles (addresses) which control different functionality:
+The `FiatTokenV1` has a number of roles (addresses) which control different functionality:
 
 * `DEFAULT_ADMIN_ROLE` - acts as the default admin role for all roles. An account with this role will be able to manage any other role.
-* `MINTER_ROLE` - can create tokens (and destroy, unless we add a `BURNER_ROLE`)
+* `MINTER_ROLE` - can create tokens and destroy tokens (that belong to them)
 * `PAUSER_ROLE` - pause the contract, which prevents all transfers, minting, and burning
 * `BLACKLISTER_ROLE` - prevent all transfers to or from a particular address, and prevents that address from minting or burning
 * `RESCUER_ROLE` - transfer any ERC-20 tokens that are locked up in the contract
@@ -34,14 +34,14 @@ Trillion will control the address of all roles.
 
 ## ERC-20
 
-The `FiatToken` implements the standard methods of the ERC-20 interface with some changes:
+The `FiatTokenV1` implements the standard methods of the ERC-20 interface with some changes:
 
 * A blacklisted address will be unable to call transfer or transferFrom, and will be unable to receive tokens.
 * transfer, transferFrom, and approve will fail if the contract has been paused.
 
 ### Creating and Destroying tokens
 
-The FiatToken contract allows any account with the `MINTER_ROLE` to create and destroy tokens. The controller of these accounts will have to be members of Trillion, and will be vetted by Trillion before they are allowed to create new tokens.
+The FiatTokenV1 contract allows any account with the `MINTER_ROLE` to create and destroy tokens. The controller of these accounts will have to be members of Trillion, and will be vetted by Trillion before they are allowed to create new tokens.
 
 In the future, when we introduce Trillion partners and allow them to assume the `MINTER_ROLE`, we should consider adding a `minterAllowance` that allows Trillion to limit the number of tokens a minter can mint.
 
@@ -51,6 +51,6 @@ Addresses can be blacklisted. A blacklisted address will be unable to transfer t
 
 ### Meta transactions compatibility
 
-`FiatToken` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
+`FiatTokenV1` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
 
 The `permit` method can be used to change an account’s ERC20 allowance by presenting a message signed by the account. Users may update their ERC-20 allowances by signing a permit message and passing the signed message to a relayer who will execute the on-chain transaction, instead of submitting a transaction themselves.

@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "lint": "solhint 'src/**/*.sol' && solhint --config .solhint.test.json 'test/**/*.sol'",
-    "test": "forge test --ffi",
+    "test": "forge test",
     "coverage": "forge coverage --report lcov && lcov --remove ./lcov.info -o ./lcov.info 'script' && genhtml lcov.info --branch-coverage --output-dir coverage && open coverage/index.html"
   },
   "devDependencies": {

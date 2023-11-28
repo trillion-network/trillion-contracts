@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
+// solhint-disable func-name-mixedcase
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 
 error CallerBlacklisted(address account);
 
@@ -11,9 +12,7 @@ error CallerBlacklisted(address account);
  * @title Blacklistable Token
  * @dev Allows accounts to be blacklisted by a "blacklister" role
  */
-contract Blacklistable is AccessControlUpgradeable {
-    bytes32 public constant BLACKLISTER_ROLE = keccak256("BLACKLISTER_ROLE");
-
+abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
     mapping(address accountAddress => bool blacklisted) internal _blacklisted;
 
     event Blacklisted(address indexed account);
@@ -30,16 +29,11 @@ contract Blacklistable is AccessControlUpgradeable {
         _;
     }
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
-
     /**
      * @dev Adds account to blacklist
      * @param account The address to blacklist
      */
-    function blacklist(address account) external onlyRole(BLACKLISTER_ROLE) {
+    function blacklist(address account) public virtual {
         _blacklisted[account] = true;
         emit Blacklisted(account);
     }
@@ -48,7 +42,7 @@ contract Blacklistable is AccessControlUpgradeable {
      * @dev Removes account from blacklist
      * @param account The address to remove from the blacklist
      */
-    function unBlacklist(address account) external onlyRole(BLACKLISTER_ROLE) {
+    function unBlacklist(address account) public virtual {
         _blacklisted[account] = false;
         emit UnBlacklisted(account);
     }
@@ -57,7 +51,11 @@ contract Blacklistable is AccessControlUpgradeable {
      * @dev Checks if account is blacklisted
      * @param account The address to check
      */
-    function isBlacklisted(address account) external view returns (bool) {
+    function isBlacklisted(address account) public view returns (bool) {
         return _blacklisted[account];
     }
+
+    function __ERC20Blacklistable_init() internal onlyInitializing {}
+
+    function __ERC20Blacklistable_init_unchained() internal onlyInitializing {}
 }
