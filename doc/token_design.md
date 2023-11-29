@@ -30,9 +30,12 @@ The `FiatToken` has a number of roles (addresses) which control different functi
 * `BLACKLISTER_ROLE` - prevent all transfers to or from a particular address, and prevents that address from minting or burning
 * `RESCUER_ROLE` - transfer any ERC-20 tokens that are locked up in the contract
 * `UPGRADER_ROLE` - manage the proxy-level functionalities such as upgrading the implementation contract
-* `OWNER` - re-assign any of the roles except for admin
 
 Trillion will control the address of all roles.
+
+We use OpenZeppelin's [Access Control](https://docs.openzeppelin.com/contracts/5.x/access-control#using-access-control) contracts to implement role-based access control. This gives us maximum flexibility flexibility in permissioning based on the principle of least principle (one role per function if needed), and a unified interface to `grantRole`, `revokeRole`, and `renounceRole`.
+
+Only the controller of an account with the `DEFAULT_ADMIN_ROLE` is allowed to grant and revoke roles.
 
 ## ERC-20
 
@@ -59,4 +62,4 @@ If tokens get sent erroneously to our contract, `FiatToken` supports a `rescue` 
 
 `FiatToken` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
 
-The `permit` method can be used to change an account’s ERC20 allowance by presenting a message signed by the account. Users may update their ERC-20 allowances by signing a permit message and passing the signed message to a relayer who will execute the on-chain transaction, instead of submitting a transaction themselves.
+The `permit` method can be used to change an account’s ERC20 allowance by presenting a message signed by the account. Users may update their ERC-20 allowances by signing a permit message and passing the signed message to a relayer who will execute the on-chain transaction, instead of submitting a transaction themselves. This is in contrast to the `approve/transferFrom` pattern where the token holder account still needs to send the `approve` transaction in order for the allowance to be set.
