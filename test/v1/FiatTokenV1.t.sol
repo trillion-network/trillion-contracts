@@ -8,7 +8,16 @@ import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol"
 import {IERC20Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {CallerBlacklisted} from "../../src/v1/BlacklistableV1.sol";
+
+// dummy token for testing rescue function
+contract Ramen is ERC20 {
+    constructor(uint256 initialSupply) ERC20("Ramen", "RMN") {
+        _mint(msg.sender, initialSupply);
+    }
+}
 
 contract FiatTokenV1Test is Test {
     FiatTokenV1 public fiatTokenV1;
@@ -47,7 +56,8 @@ contract FiatTokenV1Test is Test {
         fiatTokenV1 = FiatTokenV1(proxy);
     }
 
-    // initialization
+    // Initialization grants roles
+
     function testInitializedRoles() public {
         assertEq(fiatTokenV1.hasRole(fiatTokenV1.DEFAULT_ADMIN_ROLE(), defaultAdmin), true);
         assertEq(fiatTokenV1.hasRole(fiatTokenV1.PAUSER_ROLE(), pauser), true);
@@ -89,7 +99,12 @@ contract FiatTokenV1Test is Test {
         assertEq(fiatTokenV1.totalSupply(), 100);
     }
 
-    // function testPermit() public {}
+    function testApprove() public {
+        assertEq(fiatTokenV1.allowance(owner, unauthorized), 0);
+        vm.prank(owner);
+        fiatTokenV1.approve(unauthorized, 100);
+        assertEq(fiatTokenV1.allowance(owner, unauthorized), 100);
+    }
 
     function testMint() public {
         assertEq(fiatTokenV1.totalSupply(), 0);
@@ -270,16 +285,12 @@ contract FiatTokenV1Test is Test {
     }
 
     function testRescue() public {
-        assertEq(fiatTokenV1.totalSupply(), 0);
-        vm.prank(minter);
-        fiatTokenV1.mint(minter, 100);
-        assertEq(fiatTokenV1.totalSupply(), 100);
-        assertEq(fiatTokenV1.balanceOf(minter), 100);
+        Ramen gld = new Ramen(100);
+        gld.transfer(address(fiatTokenV1), 100);
+        assertEq(gld.balanceOf(address(fiatTokenV1)), 100);
         vm.prank(rescuer);
-        // fiatTokenV1.rescue(fiatTokenV1, owner, 10);
-        // assertEq(fiatTokenV1.totalSupply(), 0);
-        // assertEq(fiatTokenV1.balanceOf(minter), 0);
-        // assertEq(fiatTokenV1.balanceOf(owner), 100);
+        fiatTokenV1.rescue(gld, unauthorized, 100);
+        assertEq(gld.balanceOf(address(fiatTokenV1)), 0);
     }
 
     function testBlacklist() public {
@@ -356,19 +367,20 @@ contract FiatTokenV1Test is Test {
         fiatTokenV1.unBlacklist(minter);
     }
 
-    // access control
+    // Access control
 
     function testGrantRole() public {
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
         bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, unauthorized), false);
         vm.prank(defaultAdmin);
         fiatTokenV1.grantRole(upgraderRole, unauthorized);
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), true);
+        assertEq(fiatTokenV1.hasRole(upgraderRole, unauthorized), true);
     }
 
     function testGrantRoleUnauthorized() public {
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
         bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, unauthorized), false);
+
         vm.expectRevert(
             abi.encodeWithSelector(
                 IAccessControl.AccessControlUnauthorizedAccount.selector, unauthorized, fiatTokenV1.DEFAULT_ADMIN_ROLE()
@@ -376,12 +388,13 @@ contract FiatTokenV1Test is Test {
         );
         vm.prank(unauthorized);
         fiatTokenV1.grantRole(upgraderRole, unauthorized);
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
+        assertEq(fiatTokenV1.hasRole(upgraderRole, unauthorized), false);
     }
 
     function testHasRole() public {
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
-        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), upgrader), true);
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, unauthorized), false);
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), true);
     }
 
     function testGetRoleAdmin() public {
@@ -415,4 +428,6 @@ contract FiatTokenV1Test is Test {
         fiatTokenV1.renounceRole(upgraderRole, upgrader);
         assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), false);
     }
+
+    // TODO: Upgradeability
 }
