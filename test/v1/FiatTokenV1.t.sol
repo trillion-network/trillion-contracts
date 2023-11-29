@@ -12,6 +12,7 @@ import {CallerBlacklisted} from "../../src/v1/BlacklistableV1.sol";
 
 contract FiatTokenV1Test is Test {
     FiatTokenV1 public fiatTokenV1;
+    address public proxy;
     address public owner;
     address public defaultAdmin;
     address public pauser;
@@ -35,7 +36,7 @@ contract FiatTokenV1Test is Test {
         // disable upgrade safety checks
         Options memory opts;
         opts.unsafeSkipAllChecks = true;
-        address proxy = Upgrades.deployUUPSProxy(
+        proxy = Upgrades.deployUUPSProxy(
             "FiatTokenV1.sol",
             abi.encodeCall(
                 FiatTokenV1.initialize,
@@ -43,7 +44,6 @@ contract FiatTokenV1Test is Test {
             ),
             opts
         );
-        // initialize implementation contract
         fiatTokenV1 = FiatTokenV1(proxy);
     }
 
@@ -74,6 +74,22 @@ contract FiatTokenV1Test is Test {
     function testDecimals() public {
         assertEq(fiatTokenV1.decimals(), 18);
     }
+
+    function testBalanceOf() public {
+        assertEq(fiatTokenV1.balanceOf(owner), 0);
+        vm.prank(minter);
+        fiatTokenV1.mint(owner, 100);
+        assertEq(fiatTokenV1.balanceOf(owner), 100);
+    }
+
+    function testTotalSupply() public {
+        assertEq(fiatTokenV1.totalSupply(), 0);
+        vm.prank(minter);
+        fiatTokenV1.mint(owner, 100);
+        assertEq(fiatTokenV1.totalSupply(), 100);
+    }
+
+    // function testPermit() public {}
 
     function testMint() public {
         assertEq(fiatTokenV1.totalSupply(), 0);
@@ -338,5 +354,65 @@ contract FiatTokenV1Test is Test {
         );
         vm.prank(unauthorized);
         fiatTokenV1.unBlacklist(minter);
+    }
+
+    // access control
+
+    function testGrantRole() public {
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        vm.prank(defaultAdmin);
+        fiatTokenV1.grantRole(upgraderRole, unauthorized);
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), true);
+    }
+
+    function testGrantRoleUnauthorized() public {
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, unauthorized, fiatTokenV1.DEFAULT_ADMIN_ROLE()
+            )
+        );
+        vm.prank(unauthorized);
+        fiatTokenV1.grantRole(upgraderRole, unauthorized);
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
+    }
+
+    function testHasRole() public {
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), unauthorized), false);
+        assertEq(fiatTokenV1.hasRole(fiatTokenV1.UPGRADER_ROLE(), upgrader), true);
+    }
+
+    function testGetRoleAdmin() public {
+        assertEq(fiatTokenV1.getRoleAdmin(fiatTokenV1.UPGRADER_ROLE()), fiatTokenV1.DEFAULT_ADMIN_ROLE());
+    }
+
+    function testRevokeRole() public {
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), true);
+        vm.prank(defaultAdmin);
+        fiatTokenV1.revokeRole(upgraderRole, upgrader);
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), false);
+    }
+
+    function testRevokeRoleUnauthorized() public {
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), true);
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                IAccessControl.AccessControlUnauthorizedAccount.selector, unauthorized, fiatTokenV1.DEFAULT_ADMIN_ROLE()
+            )
+        );
+        vm.prank(unauthorized);
+        fiatTokenV1.revokeRole(upgraderRole, unauthorized);
+    }
+
+    function testRenounceRole() public {
+        bytes32 upgraderRole = fiatTokenV1.UPGRADER_ROLE();
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), true);
+        vm.prank(upgrader); // caller needs to be the one renouncing their own role
+        fiatTokenV1.renounceRole(upgraderRole, upgrader);
+        assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), false);
     }
 }
