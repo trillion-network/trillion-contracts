@@ -9,7 +9,7 @@ import {FiatTokenV1} from "../src/v1/FiatTokenV1.sol";
 
 contract DeployFiatToken is Script {
     function run() public {
-        uint256 deployerPrivateKey = vm.envUint("SEPOLIA_PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address defaultAdmin = vm.envAddress("DEFAULT_ADMIN_ADDRESS");
         address pauser = vm.envAddress("PAUSER_ADDRESS");
         address minter = vm.envAddress("MINTER_ADDRESS");

@@ -8,16 +8,10 @@ import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol"
 import {IERC20Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {CallerBlacklisted} from "../../src/v1/BlacklistableV1.sol";
-
-// dummy token for testing rescue function
-contract Ramen is ERC20 {
-    constructor(uint256 initialSupply) ERC20("Ramen", "RMN") {
-        _mint(msg.sender, initialSupply);
-    }
-}
+import {Ramen} from "../mocks/Ramen.sol";
+import {FiatTokenV99} from "../mocks/FiatTokenV99.sol";
 
 contract FiatTokenV1Test is Test {
     FiatTokenV1 public fiatTokenV1;
@@ -172,6 +166,22 @@ contract FiatTokenV1Test is Test {
         fiatTokenV1.burn(100);
     }
 
+    function testBurnFrom() public {
+        assertEq(fiatTokenV1.totalSupply(), 0);
+        vm.prank(minter);
+        fiatTokenV1.mint(unauthorized, 100);
+        assertEq(fiatTokenV1.totalSupply(), 100);
+        assertEq(fiatTokenV1.balanceOf(unauthorized), 100);
+        vm.prank(unauthorized);
+        // needs to be minter as only account with MINTER_ROLE allowed to burn
+        fiatTokenV1.approve(minter, 100);
+        assertEq(fiatTokenV1.allowance(unauthorized, minter), 100);
+        vm.prank(minter);
+        fiatTokenV1.burnFrom(unauthorized, 100);
+        assertEq(fiatTokenV1.totalSupply(), 0);
+        assertEq(fiatTokenV1.balanceOf(unauthorized), 0);
+    }
+
     function testTransfer() public {
         assertEq(fiatTokenV1.totalSupply(), 0);
         vm.prank(minter);
@@ -282,6 +292,13 @@ contract FiatTokenV1Test is Test {
         );
         vm.prank(unauthorized);
         fiatTokenV1.unpause();
+    }
+
+    function testPaused() public {
+        assertEq(fiatTokenV1.paused(), false);
+        vm.prank(pauser);
+        fiatTokenV1.pause();
+        assertEq(fiatTokenV1.paused(), true);
     }
 
     function testRescue() public {
@@ -429,5 +446,20 @@ contract FiatTokenV1Test is Test {
         assertEq(fiatTokenV1.hasRole(upgraderRole, upgrader), false);
     }
 
-    // TODO: Upgradeability
+    // Upgradeability
+
+    function testUpgradeToAndCall() public {
+        // new implementation contract
+        FiatTokenV99 fiatTokenV99 = new FiatTokenV99();
+        address newImplementationAddress = address(fiatTokenV99);
+        assertEq(fiatTokenV1.version(), "v1");
+        // upgrade contract
+        vm.prank(upgrader);
+        fiatTokenV1.upgradeToAndCall(newImplementationAddress, "");
+        address updatedImplementationAddress = Upgrades.getImplementationAddress(proxy);
+        // verify implementation address is updated
+        assertEq(newImplementationAddress, updatedImplementationAddress);
+        // verify version() function implementation is updated
+        assertEq(fiatTokenV1.version(), "v99");
+    }
 }

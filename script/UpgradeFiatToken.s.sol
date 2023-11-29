@@ -10,7 +10,7 @@ import {FiatTokenV1} from "../src/v1/FiatTokenV1.sol";
 contract DeployFiatToken is Script {
     function run() public {
         // needs to be the private key of the account with the upgrader role
-        uint256 deployerPrivateKey = vm.envUint("SEPOLIA_PRIVATE_KEY");
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         address fiatTokenProxyAddress = vm.envAddress("FIAT_TOKEN_PROXY_ADDRESS");
         // set current implementation reference

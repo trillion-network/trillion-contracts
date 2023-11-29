@@ -131,6 +131,22 @@ Example of how to deploy a simple contract using a Foundry script.
 forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
 ```
 
+To deploy `FiatToken`, enter the required env vars in `.env`, then run:
+
+```shell
+forge script script/DeployFiatToken.s.sol:DeployFiatToken --rpc-url $SEPOLIA_RPC_URL --broadcast --verify --ffi -vvvv
+```
+
+### Upgrading a Contract
+
+If your contract is upgradeable, you can define a Foundry script to upgrade your contract. You will need to set the address of your proxy contract as an env var and use that in your script.
+
+To upgrade `FiatToken`, set the `FIAT_TOKEN_PROXY_ADDRESS` in `.env` and update the current (e.g. `FiatTokenV1`) and new implementation contract name you want to upgrade to (e.g. `FiatTokenV2`) in `script/UpgradeFiateToken.s.sol`, and run:
+
+```shell
+forge script script/UpgradeFiatToken.s.sol:UpgradeFiatToken --rpc-url $SEPOLIA_RPC_URL --broadcast --verify --ffi -vvvv
+```
+
 ## Foundry Tooling
 
 ### Chisel

@@ -93,7 +93,7 @@ contract FiatTokenV1 is
         super.unBlacklist(account);
     }
 
-    function version() public pure returns (string memory) {
+    function version() public pure virtual returns (string memory) {
         return "v1";
     }
 
