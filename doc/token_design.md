@@ -16,11 +16,13 @@ User ---- tx ---> Proxy ----------> Implementation_v0
 
 We use OpenZeppelin's [Upgrades Plugin](https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades) to deploy our contracts, which runs upgrade safety checks by default during deployments and upgrades.
 
-The proxy contract is a [`ERC1967Proxy`](https://eips.ethereum.org/EIPS/eip-1967) which gets deployed as part of the `Deploy.s.sol` script. `FiatTokenV1` is the logic contract which contains the implementation.
+The proxy contract is a [`ERC1967Proxy`](https://eips.ethereum.org/EIPS/eip-1967) which gets deployed as part of the `DeployFiatToken.s.sol` script. `FiatToken` is the logic contract which contains the implementation.
+
+To upgrade, use the `UpgradeFiatToken.s.sol` script.
 
 ## Roles
 
-The `FiatTokenV1` has a number of roles (addresses) which control different functionality:
+The `FiatToken` has a number of roles (addresses) which control different functionality:
 
 * `DEFAULT_ADMIN_ROLE` - acts as the default admin role for all roles. An account with this role will be able to manage any other role.
 * `MINTER_ROLE` - can create tokens and destroy tokens (that belong to them)
@@ -47,10 +49,14 @@ In the future, when we introduce Trillion partners and allow them to assume the 
 
 ### Blacklisting
 
-Addresses can be blacklisted. A blacklisted address will be unable to transfer tokens, mint, or burn tokens.
+Addresses can be blacklisted. A blacklisted address will be unable to transfer, mint, or burn tokens.
+
+### Rescuing Tokens
+
+If tokens get sent erroneously to our contract, `FiatToken` supports a `rescue` method that allows us to transfer tokens locked up in the contract to a recipient address.
 
 ### Meta transactions compatibility
 
-`FiatTokenV1` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
+`FiatToken` implements gasless approval of tokens (standardized as [ERC2612](https://eips.ethereum.org/EIPS/eip-2612)) via the `permit` function.
 
 The `permit` method can be used to change an account’s ERC20 allowance by presenting a message signed by the account. Users may update their ERC-20 allowances by signing a permit message and passing the signed message to a relayer who will execute the on-chain transaction, instead of submitting a transaction themselves.
