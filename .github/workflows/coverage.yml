@@ -44,7 +44,7 @@ jobs:
         id: coverage-base
 
       - name: Archive base branch code coverage results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{github.sha}}.lcov.info
           path: ./${{github.sha}}.lcov.info
@@ -64,7 +64,7 @@ jobs:
         id: coverage-head
 
       - name: Archive head branch code coverage results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{github.event.pull_request.base.sha}}.lcov.info
           path: ./${{github.event.pull_request.base.sha}}.lcov.info
