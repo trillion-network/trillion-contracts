@@ -1,7 +1,7 @@
 {
   "name": "@trillion-x/trillion-contracts",
   "version": "1.0.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": "git@github.com:royal-markets/royal-contracts.git",
   "files": [
     "out",

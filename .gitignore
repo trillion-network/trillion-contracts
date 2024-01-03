@@ -4,7 +4,8 @@ out/
 
 # Ignores development broadcast logs
 !/broadcast
-/broadcast/*/31337/
+# sepolia chain number is 11155111
+/broadcast/*/11155111/
 /broadcast/**/dry-run/
 
 # Docs

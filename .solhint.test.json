@@ -1,19 +1,39 @@
 {
-    "extends": "solhint:recommended",
-    "rules": {
-      "compiler-version": ["error", "^0.8.0"],
-  
-      "foundry-test-functions": ["warn", ["setUp"]],
-      "func-named-parameters": ["warn", 3],
-      "func-visibility": ["warn", { "ignoreConstructors": true }],
-      "func-param-name-mixedcase": "warn",
-      "modifier-name-mixedcase": "warn",
-      "named-parameters-mapping": "warn",
-      "ordering": "warn",
-      "private-vars-leading-underscore": ["warn", { "strict": true }],
-  
-      "func-name-mixedcase": "off",
-      "no-unused-import": "off"
-    }
+  "extends": "solhint:recommended",
+  "rules": {
+    "compiler-version": [
+      "error",
+      "^0.8.0"
+    ],
+    "foundry-test-functions": [
+      "warn",
+      [
+        "setUp"
+      ]
+    ],
+    "func-named-parameters": [
+      "warn",
+      3
+    ],
+    "func-visibility": [
+      "warn",
+      {
+        "ignoreConstructors": true
+      }
+    ],
+    "func-param-name-mixedcase": "warn",
+    "modifier-name-mixedcase": "warn",
+    "named-parameters-mapping": "warn",
+    "ordering": "warn",
+    "private-vars-leading-underscore": [
+      "warn",
+      {
+        "strict": true
+      }
+    ],
+    "no-global-import": "off",
+    "no-empty-blocks": "off",
+    "func-name-mixedcase": "off",
+    "no-unused-import": "off"
   }
-  
+}
