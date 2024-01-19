@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol";
+
 import {Test, console2} from "forge-std/Test.sol";
 import {FiatTokenV1} from "../../src/v1/FiatTokenV1.sol";
 
@@ -15,7 +18,7 @@ import {FiatTokenV99} from "../mocks/FiatTokenV99.sol";
 
 contract FiatTokenV1Test is Test {
     FiatTokenV1 public fiatTokenV1;
-    address public proxy;
+    ERC1967Proxy public proxy;
     address public owner;
     address public defaultAdmin;
     address public pauser;
@@ -36,18 +39,19 @@ contract FiatTokenV1Test is Test {
         rescuer = vm.addr(5);
         blacklister = vm.addr(6);
         unauthorized = vm.addr(7);
-        // disable upgrade safety checks
-        Options memory opts;
-        opts.unsafeSkipAllChecks = true;
-        proxy = Upgrades.deployUUPSProxy(
-            "FiatTokenV1.sol",
+
+        // Deploy the token implementation
+        fiatTokenV1 = new FiatTokenV1();
+        // Deploy the proxy and initialize the contract through the proxy
+        proxy = new ERC1967Proxy(
+            address(fiatTokenV1),
             abi.encodeCall(
-                FiatTokenV1.initialize,
+                fiatTokenV1.initialize,
                 (defaultAdmin, pauser, minter, upgrader, rescuer, blacklister, tokenName, tokenSymbol)
-            ),
-            opts
+            )
         );
-        fiatTokenV1 = FiatTokenV1(proxy);
+        // Attach the FiatTokenV1 interface to the deployed proxy
+        fiatTokenV1 = FiatTokenV1(address(proxy));
     }
 
     // Initialization grants roles
@@ -456,7 +460,7 @@ contract FiatTokenV1Test is Test {
         // upgrade contract
         vm.prank(upgrader);
         fiatTokenV1.upgradeToAndCall(newImplementationAddress, "");
-        address updatedImplementationAddress = Upgrades.getImplementationAddress(proxy);
+        address updatedImplementationAddress = Upgrades.getImplementationAddress(address(proxy));
         // verify implementation address is updated
         assertEq(newImplementationAddress, updatedImplementationAddress);
         // verify version() function implementation is updated
