@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // solhint-disable func-name-mixedcase
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
@@ -11,6 +11,7 @@ error CallerBlacklisted(address account);
 /**
  * @title Blacklistable Token
  * @dev Allows accounts to be blacklisted by a "blacklister" role
+ * @custom:security-contact snggeng@gmail.com
  */
 abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
     mapping(address accountAddress => bool blacklisted) internal _blacklisted;
@@ -27,6 +28,11 @@ abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upg
             revert CallerBlacklisted(account);
         }
         _;
+    }
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
     }
 
     /**
