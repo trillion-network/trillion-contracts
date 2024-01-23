@@ -30,6 +30,10 @@ contract FiatTokenV1Test is Test {
     string public tokenName = "FiatTokenV1";
     string public tokenSymbol = "FIAT";
 
+    // events
+    event Blacklisted(address indexed account);
+    event UnBlacklisted(address indexed account);
+
     function setUp() public {
         owner = address(this);
         defaultAdmin = vm.addr(1);
@@ -323,6 +327,8 @@ contract FiatTokenV1Test is Test {
 
         // blacklist minter account
         assertEq(fiatTokenV1.isBlacklisted(minter), false);
+        vm.expectEmit();
+        emit Blacklisted(minter);
         vm.prank(blacklister);
         fiatTokenV1.blacklist(minter);
         assertEq(fiatTokenV1.isBlacklisted(minter), true);
@@ -343,10 +349,14 @@ contract FiatTokenV1Test is Test {
     function testUnblacklist() public {
         // blacklist minter account
         assertEq(fiatTokenV1.isBlacklisted(minter), false);
+        vm.expectEmit();
+        emit Blacklisted(minter);
         vm.prank(blacklister);
         fiatTokenV1.blacklist(minter);
         assertEq(fiatTokenV1.isBlacklisted(minter), true);
         // unblacklist minter account
+        vm.expectEmit();
+        emit UnBlacklisted(minter);
         vm.prank(blacklister);
         fiatTokenV1.unBlacklist(minter);
         assertEq(fiatTokenV1.isBlacklisted(minter), false);
