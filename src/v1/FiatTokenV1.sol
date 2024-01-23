@@ -29,6 +29,11 @@ contract FiatTokenV1 is
     bytes32 public constant RESCUER_ROLE = keccak256("RESCUER_ROLE");
     bytes32 public constant BLACKLISTER_ROLE = keccak256("BLACKLISTER_ROLE");
 
+    /// @dev reserve storage slots so that future upgrades do not affect storage layout of child contracts
+    /// when extra variables are added, reduce the appropriate slots from the storage gap
+    /// See https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable#storage-gaps
+    uint256[50] __gap;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();

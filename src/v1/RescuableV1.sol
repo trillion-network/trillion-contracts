@@ -26,5 +26,10 @@ abstract contract RescuableV1 is Initializable, ContextUpgradeable, ERC20Upgrade
         token.safeTransfer(to, amount);
     }
 
+    /**
+     * @dev Internal initializer function using OZ naming convention __{ContractName}_init
+     *
+     * Contract inheriting from this should call this function in thei public initialize() function
+     */
     function __ERC20Rescuable_init() internal onlyInitializing {}
 }
