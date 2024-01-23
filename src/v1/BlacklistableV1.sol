@@ -16,7 +16,16 @@ error CallerBlacklisted(address account);
 abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
     mapping(address accountAddress => bool blacklisted) internal _blacklisted;
 
+    /**
+     * @dev Blacklisted event
+     * @param account The address that was blacklisted
+     */
     event Blacklisted(address indexed account);
+
+    /**
+     * @dev UnBlacklisted event
+     * @param account The address that was unblacklisted
+     */
     event UnBlacklisted(address indexed account);
 
     /**
