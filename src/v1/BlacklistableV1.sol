@@ -56,6 +56,4 @@ abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upg
     }
 
     function __ERC20Blacklistable_init() internal onlyInitializing {}
-
-    function __ERC20Blacklistable_init_unchained() internal onlyInitializing {}
 }

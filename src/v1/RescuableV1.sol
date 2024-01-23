@@ -22,6 +22,4 @@ abstract contract RescuableV1 is Initializable, ContextUpgradeable, ERC20Upgrade
     }
 
     function __ERC20Rescuable_init() internal onlyInitializing {}
-
-    function __ERC20Rescuable_init_unchained() internal onlyInitializing {}
 }
