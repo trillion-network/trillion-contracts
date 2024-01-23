@@ -1,0 +1,11 @@
+{
+    "contract_inspector": {
+        "enabled": true,
+        "scan_directories": [
+            "src/"
+        ]
+    },
+    "dependency_checker": {
+        "enabled": true
+    }
+}
