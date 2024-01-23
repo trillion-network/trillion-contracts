@@ -8,6 +8,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+/**
+ * @title Rescuable Token
+ * @dev Allows tokens to be rescued by a "rescuer" role
+ * @custom:security-contact snggeng@gmail.com
+ */
 abstract contract RescuableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
     using SafeERC20 for IERC20;
 
