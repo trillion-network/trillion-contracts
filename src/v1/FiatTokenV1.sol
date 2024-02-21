@@ -85,12 +85,12 @@ contract FiatTokenV1 is
         super.rescue(token, to, amount);
     }
 
-    function blacklist(address account) public override(BlacklistableV1) onlyRole(BLACKLISTER_ROLE) {
-        super.blacklist(account);
+    function blacklist(address account) public onlyRole(BLACKLISTER_ROLE) {
+        super._blacklist(account);
     }
 
-    function unBlacklist(address account) public override(BlacklistableV1) onlyRole(BLACKLISTER_ROLE) {
-        super.unBlacklist(account);
+    function unBlacklist(address account) public onlyRole(BLACKLISTER_ROLE) {
+        super._unBlacklist(account);
     }
 
     function version() public pure virtual returns (string memory) {

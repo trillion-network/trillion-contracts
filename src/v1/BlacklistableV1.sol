@@ -45,10 +45,18 @@ abstract contract BlacklistableV1 is Initializable {
     }
 
     /**
+     * @dev Checks if account is blacklisted
+     * @param account The address to check
+     */
+    function isBlacklisted(address account) public view returns (bool) {
+        return _blacklisted[account];
+    }
+
+    /**
      * @dev Adds account to blacklist
      * @param account The address to blacklist
      */
-    function blacklist(address account) public virtual {
+    function _blacklist(address account) internal {
         _blacklisted[account] = true;
         emit Blacklisted(account);
     }
@@ -57,17 +65,9 @@ abstract contract BlacklistableV1 is Initializable {
      * @dev Removes account from blacklist
      * @param account The address to remove from the blacklist
      */
-    function unBlacklist(address account) public virtual {
+    function _unBlacklist(address account) internal {
         _blacklisted[account] = false;
         emit UnBlacklisted(account);
-    }
-
-    /**
-     * @dev Checks if account is blacklisted
-     * @param account The address to check
-     */
-    function isBlacklisted(address account) public view returns (bool) {
-        return _blacklisted[account];
     }
 
     /**

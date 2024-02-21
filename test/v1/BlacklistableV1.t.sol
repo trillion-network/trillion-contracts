@@ -10,6 +10,14 @@ contract Blacklistable is BlacklistableV1 {
     function initialize() public initializer {
         __ERC20Blacklistable_init();
     }
+
+    function blacklist(address account) external {
+        super._blacklist(account);
+    }
+
+    function unBlacklist(address account) external {
+        super._unBlacklist(account);
+    }
 }
 
 contract BlacklistableV1Test is Test {
