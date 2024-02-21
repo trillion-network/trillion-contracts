@@ -13,6 +13,7 @@ contract Rescuable is RescuableV1 {
         __ERC20Rescuable_init();
     }
 
+    // solhint-disable-next-line foundry-test-functions
     function rescue(IERC20 token, address destination, uint256 amount) external {
         super._rescue(token, destination, amount);
     }

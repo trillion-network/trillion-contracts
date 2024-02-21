@@ -11,10 +11,12 @@ contract Blacklistable is BlacklistableV1 {
         __ERC20Blacklistable_init();
     }
 
+    // solhint-disable-next-line foundry-test-functions
     function blacklist(address account) external {
         super._blacklist(account);
     }
 
+    // solhint-disable-next-line foundry-test-functions
     function unBlacklist(address account) external {
         super._unBlacklist(account);
     }

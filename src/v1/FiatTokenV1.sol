@@ -39,7 +39,7 @@ contract FiatTokenV1 is
     /// for reference, in 2023, there's about ~2.3 trillion USD in circulation
     /// we set the max supply to 1 trillion tokens (1e12 * 1e18 = 1e30 wei)
     /// if we need more than 1 trillion tokens, we can increase the max supply
-    uint256 public constant maxTokenSupply = 1e30;
+    uint256 public constant MAX_TOKEN_SUPPLY = 1e30;
 
     function initialize(
         address defaultAdmin,
@@ -52,7 +52,7 @@ contract FiatTokenV1 is
         string memory tokenSymbol
     ) public initializer {
         __ERC20_init(tokenName, tokenSymbol);
-        __ERC20Capped_init(maxTokenSupply);
+        __ERC20Capped_init(MAX_TOKEN_SUPPLY);
         __ERC20Pausable_init();
         __ERC20Burnable_init();
         __AccessControl_init();
