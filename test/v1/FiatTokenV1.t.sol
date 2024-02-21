@@ -9,6 +9,8 @@ import {FiatTokenV1} from "../../src/v1/FiatTokenV1.sol";
 
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 import {IERC20Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
+import {ERC20CappedUpgradeable} from
+    "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -133,6 +135,17 @@ contract FiatTokenV1Test is Test {
         );
         vm.prank(unauthorized);
         fiatTokenV1.mint(owner, 100);
+    }
+
+    function testMintAboveCap() public {
+        assertEq(fiatTokenV1.cap(), 1e30);
+        assertEq(fiatTokenV1.totalSupply(), 0);
+        vm.expectRevert(abi.encodeWithSelector(ERC20CappedUpgradeable.ERC20ExceededCap.selector, 1e31, 1e30));
+        vm.prank(minter);
+        fiatTokenV1.mint(owner, 1e31);
+
+        // nothing minted
+        assertEq(fiatTokenV1.totalSupply(), 0);
     }
 
     function testBurn() public {
