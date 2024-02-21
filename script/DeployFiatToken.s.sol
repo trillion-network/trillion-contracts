@@ -9,7 +9,6 @@ import {FiatTokenV1} from "../src/v1/FiatTokenV1.sol";
 
 contract DeployFiatToken is Script {
     function run() public {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address defaultAdmin = vm.envAddress("DEFAULT_ADMIN_ADDRESS");
         address pauser = vm.envAddress("PAUSER_ADDRESS");
         address minter = vm.envAddress("MINTER_ADDRESS");
@@ -19,7 +18,7 @@ contract DeployFiatToken is Script {
         string memory tokenName = vm.envString("TOKEN_NAME");
         string memory tokenSymbol = vm.envString("TOKEN_SYMBOL");
 
-        vm.startBroadcast(deployerPrivateKey);
+        vm.startBroadcast();
         address uupsProxy = Upgrades.deployUUPSProxy(
             "FiatTokenV1.sol",
             abi.encodeCall(
