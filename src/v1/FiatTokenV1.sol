@@ -34,11 +34,6 @@ contract FiatTokenV1 is
     /// See https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable#storage-gaps
     uint256[50] private __gap;
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
-
     function initialize(
         address defaultAdmin,
         address pauser,
