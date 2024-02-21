@@ -13,7 +13,7 @@ error CallerBlacklisted(address account);
  * @dev Allows accounts to be blacklisted by a "blacklister" role
  * @custom:security-contact snggeng@gmail.com
  */
-abstract contract BlacklistableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
+abstract contract BlacklistableV1 is Initializable {
     mapping(address accountAddress => bool blacklisted) internal _blacklisted;
 
     /**

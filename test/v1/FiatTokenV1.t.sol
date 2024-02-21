@@ -13,8 +13,16 @@ import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {CallerBlacklisted} from "../../src/v1/BlacklistableV1.sol";
-import {Ramen} from "../mocks/Ramen.sol";
-import {FiatTokenV99} from "../mocks/FiatTokenV99.sol";
+import {Ramen} from "../../src/mocks/Ramen.sol";
+// import {FiatTokenV99} from "../../src/mocks/FiatTokenV99.sol";
+
+// mock contract to test upgrades
+contract FiatTokenV99 is FiatTokenV1 {
+    // solhint-disable-next-line foundry-test-functions
+    function version() public pure virtual override(FiatTokenV1) returns (string memory) {
+        return "v99";
+    }
+}
 
 contract FiatTokenV1Test is Test {
     FiatTokenV1 public fiatTokenV1;
@@ -466,6 +474,7 @@ contract FiatTokenV1Test is Test {
         // new implementation contract
         FiatTokenV99 fiatTokenV99 = new FiatTokenV99();
         address newImplementationAddress = address(fiatTokenV99);
+        assertEq(fiatTokenV99.version(), "v99");
         assertEq(fiatTokenV1.version(), "v1");
         // upgrade contract
         vm.prank(upgrader);
