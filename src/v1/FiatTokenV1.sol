@@ -81,8 +81,8 @@ contract FiatTokenV1 is
         super.burnFrom(account, value);
     }
 
-    function rescue(IERC20 token, address to, uint256 amount) public override(RescuableV1) onlyRole(RESCUER_ROLE) {
-        super.rescue(token, to, amount);
+    function rescue(IERC20 token, address to, uint256 amount) public onlyRole(RESCUER_ROLE) {
+        super._rescue(token, to, amount);
     }
 
     function blacklist(address account) public onlyRole(BLACKLISTER_ROLE) {

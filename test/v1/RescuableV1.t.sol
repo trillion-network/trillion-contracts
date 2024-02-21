@@ -12,6 +12,10 @@ contract Rescuable is RescuableV1 {
     function initialize() public initializer {
         __ERC20Rescuable_init();
     }
+
+    function rescue(IERC20 token, address destination, uint256 amount) external {
+        super._rescue(token, destination, amount);
+    }
 }
 
 contract RescuableV1Test is Test {

@@ -27,7 +27,7 @@ abstract contract RescuableV1 is Initializable {
      * @param to        Recipient address
      * @param amount    The amount of tokens to withdraw
      */
-    function rescue(IERC20 token, address to, uint256 amount) public virtual {
+    function _rescue(IERC20 token, address to, uint256 amount) internal {
         token.safeTransfer(to, amount);
     }
 
