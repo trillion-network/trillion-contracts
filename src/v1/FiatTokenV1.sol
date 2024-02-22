@@ -2,6 +2,7 @@
 pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
@@ -15,6 +16,7 @@ import "./RescuableV1.sol";
 contract FiatTokenV1 is
     Initializable,
     ERC20Upgradeable,
+    ERC20CappedUpgradeable,
     ERC20PausableUpgradeable,
     ERC20BurnableUpgradeable,
     AccessControlUpgradeable,
@@ -33,11 +35,11 @@ contract FiatTokenV1 is
     /// when extra variables are added, reduce the appropriate slots from the storage gap
     /// See https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable#storage-gaps
     uint256[50] private __gap;
-
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
+    /// @dev maximum token supply for contract
+    /// for reference, in 2023, there's about ~2.3 trillion USD in circulation
+    /// we set the max supply to 1 trillion tokens (1e12 * 1e18 = 1e30 wei)
+    /// if we need more than 1 trillion tokens, we can increase the max supply
+    uint256 public constant MAX_TOKEN_SUPPLY = 1e30;
 
     function initialize(
         address defaultAdmin,
@@ -50,6 +52,7 @@ contract FiatTokenV1 is
         string memory tokenSymbol
     ) public initializer {
         __ERC20_init(tokenName, tokenSymbol);
+        __ERC20Capped_init(MAX_TOKEN_SUPPLY);
         __ERC20Pausable_init();
         __ERC20Burnable_init();
         __AccessControl_init();
@@ -86,16 +89,16 @@ contract FiatTokenV1 is
         super.burnFrom(account, value);
     }
 
-    function rescue(IERC20 token, address to, uint256 amount) public override(RescuableV1) onlyRole(RESCUER_ROLE) {
-        super.rescue(token, to, amount);
+    function rescue(IERC20 token, address to, uint256 amount) public onlyRole(RESCUER_ROLE) {
+        super._rescue(token, to, amount);
     }
 
-    function blacklist(address account) public override(BlacklistableV1) onlyRole(BLACKLISTER_ROLE) {
-        super.blacklist(account);
+    function blacklist(address account) public onlyRole(BLACKLISTER_ROLE) {
+        super._blacklist(account);
     }
 
-    function unBlacklist(address account) public override(BlacklistableV1) onlyRole(BLACKLISTER_ROLE) {
-        super.unBlacklist(account);
+    function unBlacklist(address account) public onlyRole(BLACKLISTER_ROLE) {
+        super._unBlacklist(account);
     }
 
     function version() public pure virtual returns (string memory) {
@@ -108,7 +111,7 @@ contract FiatTokenV1 is
 
     function _update(address from, address to, uint256 value)
         internal
-        override(ERC20Upgradeable, ERC20PausableUpgradeable)
+        override(ERC20Upgradeable, ERC20CappedUpgradeable, ERC20PausableUpgradeable)
         notBlacklisted(from)
         notBlacklisted(to)
     {

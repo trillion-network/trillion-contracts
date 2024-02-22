@@ -13,7 +13,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
  * @dev Allows tokens to be rescued by a "rescuer" role
  * @custom:security-contact snggeng@gmail.com
  */
-abstract contract RescuableV1 is Initializable, ContextUpgradeable, ERC20Upgradeable {
+abstract contract RescuableV1 is Initializable {
     using SafeERC20 for IERC20;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
@@ -27,7 +27,7 @@ abstract contract RescuableV1 is Initializable, ContextUpgradeable, ERC20Upgrade
      * @param to        Recipient address
      * @param amount    The amount of tokens to withdraw
      */
-    function rescue(IERC20 token, address to, uint256 amount) public virtual {
+    function _rescue(IERC20 token, address to, uint256 amount) internal {
         token.safeTransfer(to, amount);
     }
 
