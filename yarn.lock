@@ -2,8 +2,8 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 6
-  cacheKey: 8
+  version: 8
+  cacheKey: 10
 
 "@babel/code-frame@npm:^7.0.0":
   version: 7.23.5
@@ -70,7 +70,7 @@ __metadata:
 "@solidity-parser/parser@npm:^0.18.0":
   version: 0.18.0
   resolution: "@solidity-parser/parser@npm:0.18.0"
-  checksum: 970d991529d632862fa88e107531339d84df35bf0374e31e8215ce301b19a01ede33fccf4d374402649814263f8bc278a8e6d62a0129bb877539fbdd16a604cc
+  checksum: 10/3b600b584f49bd84d6d27aeeb453c49c279df49324e104bda00d12cd3b26f18cb6230ff63db6a0ba1f383868620d318b15b7417a92aa8c580099449adaa13d76
   languageName: node
   linkType: hard
 
@@ -87,7 +87,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@trillion-x/trillion-contracts@workspace:."
   dependencies:
-    solhint: ^4.5.2
+    solhint: "npm:^4.5.2"
   languageName: unknown
   linkType: soft
 
@@ -839,31 +839,31 @@ __metadata:
   version: 4.5.2
   resolution: "solhint@npm:4.5.2"
   dependencies:
-    "@solidity-parser/parser": ^0.18.0
-    ajv: ^6.12.6
-    antlr4: ^4.13.1-patch-1
-    ast-parents: ^0.0.1
-    chalk: ^4.1.2
-    commander: ^10.0.0
-    cosmiconfig: ^8.0.0
-    fast-diff: ^1.2.0
-    glob: ^8.0.3
-    ignore: ^5.2.4
-    js-yaml: ^4.1.0
-    latest-version: ^7.0.0
-    lodash: ^4.17.21
-    pluralize: ^8.0.0
-    prettier: ^2.8.3
-    semver: ^7.5.2
-    strip-ansi: ^6.0.1
-    table: ^6.8.1
-    text-table: ^0.2.0
+    "@solidity-parser/parser": "npm:^0.18.0"
+    ajv: "npm:^6.12.6"
+    antlr4: "npm:^4.13.1-patch-1"
+    ast-parents: "npm:^0.0.1"
+    chalk: "npm:^4.1.2"
+    commander: "npm:^10.0.0"
+    cosmiconfig: "npm:^8.0.0"
+    fast-diff: "npm:^1.2.0"
+    glob: "npm:^8.0.3"
+    ignore: "npm:^5.2.4"
+    js-yaml: "npm:^4.1.0"
+    latest-version: "npm:^7.0.0"
+    lodash: "npm:^4.17.21"
+    pluralize: "npm:^8.0.0"
+    prettier: "npm:^2.8.3"
+    semver: "npm:^7.5.2"
+    strip-ansi: "npm:^6.0.1"
+    table: "npm:^6.8.1"
+    text-table: "npm:^0.2.0"
   dependenciesMeta:
     prettier:
       optional: true
   bin:
     solhint: solhint.js
-  checksum: eca674116bd48cf506b97c2fc074d905a0fdfaebc91f0f83674cb8e03c57165c303337eb304b4ba586c55915c267c9146a86e310dbbd599b168338bd85755c62
+  checksum: 10/45662bbad21da1883f6bbfb229415db6716e99c9a579d29290dd64cae223dbc837b1d4323f68c9d502cd8c56227b7b3547de0934f92a600e1622c3c577893d23
   languageName: node
   linkType: hard
 
