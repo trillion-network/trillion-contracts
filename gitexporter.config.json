@@ -1,0 +1,12 @@
+{
+    "forceReCreateRepo": true,
+    "targetRepoPath": "smart-contracts",
+    "sourceRepoPath": ".",
+    "allowedPaths": [
+        "src/*",
+        "doc/*"
+    ],
+    "ignoredPaths": [
+        ".env"
+    ]
+}
