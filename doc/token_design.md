@@ -33,7 +33,7 @@ The `FiatToken` has a number of roles (addresses) which control different functi
 
 Trillion will control the address of all roles.
 
-We use OpenZeppelin's [Access Control](https://docs.openzeppelin.com/contracts/5.x/access-control#using-access-control) contracts to implement role-based access control. This gives us maximum flexibility flexibility in permissioning based on the principle of least principle (one role per function if needed), and a unified interface to `grantRole`, `revokeRole`, and `renounceRole`.
+We use OpenZeppelin's [Access Control](https://docs.openzeppelin.com/contracts/5.x/access-control#using-access-control) contracts to implement role-based access control. This gives us maximum flexibility flexibility in permissioning based on the principle of least privilege (one role per function if needed), and a unified interface to `grantRole`, `revokeRole`, and `renounceRole`.
 
 Only the controller of an account with the `DEFAULT_ADMIN_ROLE` is allowed to grant and revoke roles.
 
