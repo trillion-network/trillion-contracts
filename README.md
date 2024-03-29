@@ -2,6 +2,12 @@
 
 Foundry-based repo for Trillion smart contracts.
 
+## Audit Reports
+- [Consensys Diligence, February 20, 2024](https://consensys.io/diligence/audits/2024/02/trillion-network/)
+
+## Contracts
+Token design for FiatToken contract can be found [here](doc/token_design.md).
+
 ## Getting Started
 
 Install dependencies:
@@ -127,7 +133,7 @@ DO NOT use `yarn` to install smart contracts. The _only thing_ we use `yarn` for
 forge install
 ```
 
-### Deploying a Contract
+## Deploying a Contract
 
 Example of how to deploy a simple contract using a Foundry script.
 
@@ -147,7 +153,7 @@ To deploy with hardware wallet:
 forge script script/DeployFiatToken.s.sol:DeployFiatToken --rpc-url $SEPOLIA_RPC_URL --ledger --hd-paths $DERIVATION_PATH --sender $HARDWARE_WALLET_ADDRESS --broadcast --verify --ffi -vvvv
 ```
 
-### Upgrading a Contract
+## Upgrading a Contract
 
 If your contract is upgradeable, you can define a Foundry script to upgrade your contract. You will need to set the address of your proxy contract as an env var and use that in your script.
 
@@ -209,19 +215,3 @@ anvil --help
 cast --help
 chisel --help
 ```
-
-## Publishing to NPM
-
-> :warning: **Not Implemented**: We haven't published to NPM
-
-To allow other systems in Trillion to build on top of these smart contracts, we publish this repository as a private npm package on the npm registry. Only git repositories setup with an NPM Token for the `trillion-x` organization on the npm registry will be able to install it as a dependency.
-
-NOTE: The package does not include the Solidity code - it only includes the ABIs (Application Binary Interface) JSON files. The assumption is that the Dapp is using [ABIType](https://abitype.dev/) directly, or something built on top of it like [viem](https://viem.sh/) - and so it's only necessary to ship the ABIs.
-
-### Required steps
-
-You _do not_ need to edit anything in `package.json` or commit/push anything to the repo to cut a new NPM version. Publishing to NPM is taken care of by [this Github Action](.github/workflows/publish_npm.yml) which fires when a new Github release is cut.
-
-To cut a Github release, follow these steps here: <https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository#creating-a-release>
-
-NOTE: NPM only supports [Semantic Versioning](https://semver.org/) - so ensure your Github release tag and release title follow semantic versioning.
