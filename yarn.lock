@@ -2,8 +2,8 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
-  cacheKey: 10
+  version: 6
+  cacheKey: 8
 
 "@babel/code-frame@npm:^7.0.0":
   version: 7.23.5
@@ -87,7 +87,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@trillion-x/trillion-contracts@workspace:."
   dependencies:
-    solhint: "npm:^4.5.2"
+    solhint: ^4.5.4
   languageName: unknown
   linkType: soft
 
@@ -835,35 +835,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solhint@npm:^4.5.2":
-  version: 4.5.2
-  resolution: "solhint@npm:4.5.2"
+"solhint@npm:^4.5.4":
+  version: 4.5.4
+  resolution: "solhint@npm:4.5.4"
   dependencies:
-    "@solidity-parser/parser": "npm:^0.18.0"
-    ajv: "npm:^6.12.6"
-    antlr4: "npm:^4.13.1-patch-1"
-    ast-parents: "npm:^0.0.1"
-    chalk: "npm:^4.1.2"
-    commander: "npm:^10.0.0"
-    cosmiconfig: "npm:^8.0.0"
-    fast-diff: "npm:^1.2.0"
-    glob: "npm:^8.0.3"
-    ignore: "npm:^5.2.4"
-    js-yaml: "npm:^4.1.0"
-    latest-version: "npm:^7.0.0"
-    lodash: "npm:^4.17.21"
-    pluralize: "npm:^8.0.0"
-    prettier: "npm:^2.8.3"
-    semver: "npm:^7.5.2"
-    strip-ansi: "npm:^6.0.1"
-    table: "npm:^6.8.1"
-    text-table: "npm:^0.2.0"
+    "@solidity-parser/parser": ^0.18.0
+    ajv: ^6.12.6
+    antlr4: ^4.13.1-patch-1
+    ast-parents: ^0.0.1
+    chalk: ^4.1.2
+    commander: ^10.0.0
+    cosmiconfig: ^8.0.0
+    fast-diff: ^1.2.0
+    glob: ^8.0.3
+    ignore: ^5.2.4
+    js-yaml: ^4.1.0
+    latest-version: ^7.0.0
+    lodash: ^4.17.21
+    pluralize: ^8.0.0
+    prettier: ^2.8.3
+    semver: ^7.5.2
+    strip-ansi: ^6.0.1
+    table: ^6.8.1
+    text-table: ^0.2.0
   dependenciesMeta:
     prettier:
       optional: true
   bin:
     solhint: solhint.js
-  checksum: 10/45662bbad21da1883f6bbfb229415db6716e99c9a579d29290dd64cae223dbc837b1d4323f68c9d502cd8c56227b7b3547de0934f92a600e1622c3c577893d23
+  checksum: 1c869d85048bbef988bf6ac855d53fc8faf07d88cf90f4da9619ec53ee617bc910fe8d9bf06251de22f1c3292b800754e77e4b060e7b8536f8076e4733a1162c
   languageName: node
   linkType: hard
 
