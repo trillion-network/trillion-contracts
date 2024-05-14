@@ -27,7 +27,6 @@
     ],
     "no-global-import": "off",
     "no-empty-blocks": "off",
-    "avoid-low-level-calls": "off",
-    "named-return-values": "off"
+    "avoid-low-level-calls": "off"
   }
 }

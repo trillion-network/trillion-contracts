@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol";
 
 import {Test, console2} from "forge-std/Test.sol";
-import {FiatTokenV1} from "../../src/v1/FiatTokenV1.sol";
+import {FiatTokenV1, UnauthorizedInitialization} from "../../src/v1/FiatTokenV1.sol";
 
 import {IAccessControl} from "@openzeppelin/contracts/access/IAccessControl.sol";
 import {IERC20Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
@@ -37,6 +37,7 @@ contract FiatTokenV1Test is Test {
     address public rescuer;
     address public blacklister;
     address public unauthorized;
+    address public trustedAddress;
     string public tokenName = "FiatTokenV1";
     string public tokenSymbol = "FIAT";
 
@@ -53,10 +54,12 @@ contract FiatTokenV1Test is Test {
         rescuer = vm.addr(5);
         blacklister = vm.addr(6);
         unauthorized = vm.addr(7);
+        trustedAddress = address(0x66787300CCc33F17643a02635ca96d54301aE2a8);
 
         // Deploy the token implementation
         fiatTokenV1 = new FiatTokenV1();
         // Deploy the proxy and initialize the contract through the proxy
+        vm.prank(trustedAddress);
         proxy = new ERC1967Proxy(
             address(fiatTokenV1),
             abi.encodeCall(
@@ -66,6 +69,20 @@ contract FiatTokenV1Test is Test {
         );
         // Attach the FiatTokenV1 interface to the deployed proxy
         fiatTokenV1 = FiatTokenV1(address(proxy));
+    }
+
+    function testUnauthorizedInitialization() public {
+        // redeploy new proxy and try to initialize implementation with unauthorized address
+        fiatTokenV1 = new FiatTokenV1();
+        vm.expectRevert(abi.encodeWithSelector(UnauthorizedInitialization.selector, unauthorized));
+        vm.prank(unauthorized);
+        proxy = new ERC1967Proxy(
+            address(fiatTokenV1),
+            abi.encodeCall(
+                fiatTokenV1.initialize,
+                (defaultAdmin, pauser, minter, upgrader, rescuer, blacklister, tokenName, tokenSymbol)
+            )
+        );
     }
 
     // Initialization grants roles
@@ -497,5 +514,26 @@ contract FiatTokenV1Test is Test {
         assertEq(newImplementationAddress, updatedImplementationAddress);
         // verify version() function implementation is updated
         assertEq(fiatTokenV1.version(), "v99");
+    }
+
+    // Trusted addresses
+
+    function testAddTrustedAddress() public {
+        assertEq(fiatTokenV1.isTrustedAddress(unauthorized), false);
+        vm.prank(defaultAdmin);
+        fiatTokenV1.addTrustedAddress(unauthorized);
+        assertEq(fiatTokenV1.isTrustedAddress(unauthorized), true);
+    }
+
+    function testRemoveTrustedAddress() public {
+        assertEq(fiatTokenV1.isTrustedAddress(trustedAddress), true);
+        vm.prank(defaultAdmin);
+        fiatTokenV1.removeTrustedAddress(trustedAddress);
+        assertEq(fiatTokenV1.isTrustedAddress(trustedAddress), false);
+    }
+
+    function testIsTrustedAddress() public {
+        assertEq(fiatTokenV1.isTrustedAddress(trustedAddress), true);
+        assertEq(fiatTokenV1.isTrustedAddress(unauthorized), false);
     }
 }

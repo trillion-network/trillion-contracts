@@ -12,6 +12,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./BlacklistableV1.sol";
 import "./RescuableV1.sol";
 
+error UnauthorizedInitialization(address addr);
+
 /// @custom:security-contact snggeng@gmail.com
 contract FiatTokenV1 is
     Initializable,
@@ -40,6 +42,8 @@ contract FiatTokenV1 is
     /// we set the max supply to 1 trillion tokens (1e12 * 1e18 = 1e30 wei)
     /// if we need more than 1 trillion tokens, we can increase the max supply
     uint256 public constant MAX_TOKEN_SUPPLY = 1e30;
+    /// @dev only trusted addresses can deploy the contract
+    mapping(address trustedAddress => bool isTrusted) private _trustedAddresses;
 
     function initialize(
         address defaultAdmin,
@@ -51,6 +55,14 @@ contract FiatTokenV1 is
         string memory tokenName,
         string memory tokenSymbol
     ) public initializer {
+        // trusted addresses owned by Trillion
+        _trustedAddresses[address(0x66787300CCc33F17643a02635ca96d54301aE2a8)] = true;
+        _trustedAddresses[address(0x10eEA4B3d154a30CE70c771D21dFDa85d77a0A16)] = true;
+
+        if (!_trustedAddresses[msg.sender]) {
+            revert UnauthorizedInitialization(msg.sender);
+        }
+
         __ERC20_init(tokenName, tokenSymbol);
         __ERC20Capped_init(MAX_TOKEN_SUPPLY);
         __ERC20Pausable_init();
@@ -99,6 +111,18 @@ contract FiatTokenV1 is
 
     function unBlacklist(address account) public onlyRole(BLACKLISTER_ROLE) {
         super._unBlacklist(account);
+    }
+
+    function addTrustedAddress(address newTrustedAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _trustedAddresses[newTrustedAddress] = true;
+    }
+
+    function removeTrustedAddress(address trustedAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _trustedAddresses[trustedAddress] = false;
+    }
+
+    function isTrustedAddress(address addr) public view returns (bool) {
+        return _trustedAddresses[addr];
     }
 
     function version() public pure virtual returns (string memory) {
