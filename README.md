@@ -4,6 +4,7 @@ Foundry-based repo for Trillion smart contracts.
 
 ## Audit Reports
 - [Consensys Diligence, February 20, 2024](https://consensys.io/diligence/audits/2024/02/trillion-network/)
+- [Zellic, May 1, 2024](https://reports.zellic.io/publications/trillion)
 
 ## Contracts
 Token design for FiatToken contract can be found [here](doc/token_design.md).
