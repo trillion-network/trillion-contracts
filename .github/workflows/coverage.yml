@@ -76,7 +76,7 @@ jobs:
           name: ${{github.sha}}.lcov.info
 
       - name: Code Coverage Report
-        uses: romeovs/lcov-reporter-action@4cf015aa4afa87b78238301f1e3dc140ea0e1ec6
+        uses: romeovs/lcov-reporter-action@87a815f34ec27a5826abba44ce09bbc688da58fd
         # The reason for using a hash rather than a version/tag, is the project
         # failed in publishing this release: https://github.com/romeovs/lcov-reporter-action/issues/47
         with:
