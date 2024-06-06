@@ -129,6 +129,10 @@ contract FiatTokenV1 is
         return "v1";
     }
 
+    function decimals() public pure virtual override returns (uint8) {
+        return 6;
+    }
+
     function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
 
     // The following functions are overrides required by Solidity.

@@ -111,7 +111,7 @@ contract FiatTokenV1Test is Test {
     }
 
     function testDecimals() public {
-        assertEq(fiatTokenV1.decimals(), 18);
+        assertEq(fiatTokenV1.decimals(), 6);
     }
 
     function testBalanceOf() public {
