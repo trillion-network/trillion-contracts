@@ -151,7 +151,7 @@ forge script script/DeployFiatToken.s.sol:DeployFiatToken --rpc-url $SEPOLIA_RPC
 To deploy with hardware wallet:
 
 ```shell
-forge script script/DeployFiatToken.s.sol:DeployFiatToken --rpc-url $SEPOLIA_RPC_URL --ledger --hd-paths $DERIVATION_PATH --sender $HARDWARE_WALLET_ADDRESS --broadcast --verify --ffi -vvvv
+forge script script/DeployFiatToken.s.sol:DeployFiatToken --rpc-url $SEPOLIA_RPC_URL --ledger --sender $HARDWARE_WALLET_ADDRESS --broadcast --verify --ffi -vvvv
 ```
 
 ## Upgrading a Contract

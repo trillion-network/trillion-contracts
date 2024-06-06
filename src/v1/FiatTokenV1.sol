@@ -126,7 +126,11 @@ contract FiatTokenV1 is
     }
 
     function version() public pure virtual returns (string memory) {
-        return "v1";
+        return "1";
+    }
+
+    function decimals() public pure virtual override returns (uint8) {
+        return 6;
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}

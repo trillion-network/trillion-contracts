@@ -22,7 +22,7 @@ import {Ramen} from "../../src/mocks/Ramen.sol";
 contract FiatTokenV99 is FiatTokenV1 {
     // solhint-disable-next-line foundry-test-functions
     function version() public pure virtual override(FiatTokenV1) returns (string memory) {
-        return "v99";
+        return "99";
     }
 }
 
@@ -99,7 +99,7 @@ contract FiatTokenV1Test is Test {
     // ERC 20 behavior
 
     function testVersion() public {
-        assertEq(fiatTokenV1.version(), "v1");
+        assertEq(fiatTokenV1.version(), "1");
     }
 
     function testName() public {
@@ -111,7 +111,7 @@ contract FiatTokenV1Test is Test {
     }
 
     function testDecimals() public {
-        assertEq(fiatTokenV1.decimals(), 18);
+        assertEq(fiatTokenV1.decimals(), 6);
     }
 
     function testBalanceOf() public {
@@ -504,8 +504,8 @@ contract FiatTokenV1Test is Test {
         // new implementation contract
         FiatTokenV99 fiatTokenV99 = new FiatTokenV99();
         address newImplementationAddress = address(fiatTokenV99);
-        assertEq(fiatTokenV99.version(), "v99");
-        assertEq(fiatTokenV1.version(), "v1");
+        assertEq(fiatTokenV99.version(), "99");
+        assertEq(fiatTokenV1.version(), "1");
         // upgrade contract
         vm.prank(upgrader);
         fiatTokenV1.upgradeToAndCall(newImplementationAddress, "");
@@ -513,7 +513,7 @@ contract FiatTokenV1Test is Test {
         // verify implementation address is updated
         assertEq(newImplementationAddress, updatedImplementationAddress);
         // verify version() function implementation is updated
-        assertEq(fiatTokenV1.version(), "v99");
+        assertEq(fiatTokenV1.version(), "99");
     }
 
     // Trusted addresses
