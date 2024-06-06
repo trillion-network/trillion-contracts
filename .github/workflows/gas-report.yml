@@ -41,7 +41,7 @@ jobs:
 
       # https://github.com/Rubilmax/foundry-gas-diff
       - name: Compare gas reports
-        uses: Rubilmax/foundry-gas-diff@v3.16
+        uses: Rubilmax/foundry-gas-diff@v3.17
         with:
           summaryQuantile: 0.8 # only display the 20% most significant gas diffs in the summary
           sortCriteria: avg,max # sort diff rows by criteria
