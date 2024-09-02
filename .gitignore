@@ -6,6 +6,8 @@ out/
 !/broadcast
 # sepolia chain number is 11155111
 /broadcast/*/11155111/
+# sepolia optimism chain number is 11155420
+/broadcast/*/11155420/
 /broadcast/**/dry-run/
 
 # Docs
