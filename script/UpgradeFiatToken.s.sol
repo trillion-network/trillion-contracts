@@ -7,7 +7,7 @@ import {Script} from "forge-std/Script.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {FiatTokenV1} from "../src/v1/FiatTokenV1.sol";
 
-contract DeployFiatToken is Script {
+contract UpgradeFiatToken is Script {
     function run() public {
         vm.startBroadcast();
         address fiatTokenProxyAddress = vm.envAddress("FIAT_TOKEN_PROXY_ADDRESS");

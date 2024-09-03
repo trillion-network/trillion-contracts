@@ -32,6 +32,7 @@ contract FiatTokenV1 is
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
     bytes32 public constant RESCUER_ROLE = keccak256("RESCUER_ROLE");
     bytes32 public constant BLACKLISTER_ROLE = keccak256("BLACKLISTER_ROLE");
+    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     /// @dev reserve storage slots so that future upgrades do not affect storage layout of child contracts
     /// when extra variables are added, reduce the appropriate slots from the storage gap
@@ -93,11 +94,11 @@ contract FiatTokenV1 is
         _mint(to, amount);
     }
 
-    function burn(uint256 value) public override(ERC20BurnableUpgradeable) onlyRole(MINTER_ROLE) {
+    function burn(uint256 value) public override(ERC20BurnableUpgradeable) onlyRole(BURNER_ROLE) {
         super.burn(value);
     }
 
-    function burnFrom(address account, uint256 value) public override(ERC20BurnableUpgradeable) onlyRole(MINTER_ROLE) {
+    function burnFrom(address account, uint256 value) public override(ERC20BurnableUpgradeable) onlyRole(BURNER_ROLE) {
         super.burnFrom(account, value);
     }
 
