@@ -5,7 +5,7 @@ pragma solidity ^0.8.20;
 import "forge-std/console2.sol";
 import {Script} from "forge-std/Script.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
-import {FiatTokenV1} from "../src/v1/FiatTokenV1.sol";
+import {FiatTokenV2} from "../src/v1/FiatTokenV2.sol";
 
 contract UpgradeFiatToken is Script {
     function run() public {
@@ -16,7 +16,7 @@ contract UpgradeFiatToken is Script {
         opts.referenceContract = "FiatTokenV1.sol";
         // upgrade contract
         Upgrades.upgradeProxy(fiatTokenProxyAddress, "FiatTokenV2.sol", "", opts);
-        console2.log("FiatTokenV1 upgraded to version 2");
+        console2.log("FiatTokenV1 upgraded to FiatTokenV2");
         vm.stopBroadcast();
     }
 }

@@ -3,14 +3,17 @@ pragma solidity 0.8.20;
 
 import "../v1/FiatTokenV1.sol";
 
+error InvalidReInitialization(address addr);
+
 /// @custom:security-contact snggeng@gmail.com
 contract FiatTokenV2 is FiatTokenV1 {
     uint8 internal _initializedVersion;
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
     function initializeV2(address burner) external {
-        // solhint-disable-next-line reason-string
-        require(_initializedVersion == 0);
+        if (_initializedVersion > 0) {
+            revert InvalidReInitialization(msg.sender);
+        }
 
         _grantRole(BURNER_ROLE, burner);
 
