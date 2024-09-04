@@ -5,7 +5,7 @@ pragma solidity ^0.8.20;
 import "forge-std/console2.sol";
 import {Script} from "forge-std/Script.sol";
 import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
-import {FiatTokenV2} from "../src/v1/FiatTokenV2.sol";
+import {FiatTokenV2} from "../src/v2/FiatTokenV2.sol";
 
 contract UpgradeFiatToken is Script {
     function run() public {
