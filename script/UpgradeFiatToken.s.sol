@@ -16,7 +16,7 @@ contract UpgradeFiatToken is Script {
         opts.referenceContract = "FiatTokenV1.sol";
         // upgrade contract
         Upgrades.upgradeProxy(fiatTokenProxyAddress, "FiatTokenV2.sol", "", opts);
-        console2.log("FiatTokenV1 upgraded to FiatTokenV2");
+        console2.log("FiatToken upgrade successful");
         vm.stopBroadcast();
     }
 }
