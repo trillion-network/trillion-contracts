@@ -82,7 +82,7 @@ contract FiatTokenV2Test is Test {
         assertEq(fiatTokenV2.totalSupply(), 100);
         assertEq(fiatTokenV2.balanceOf(burner), 100);
         vm.prank(burner);
-        fiatTokenV2.burnByBurner(100);
+        fiatTokenV2.burnByBurnerOnly(100);
         assertEq(fiatTokenV2.totalSupply(), 0);
         assertEq(fiatTokenV2.balanceOf(burner), 0);
     }
@@ -102,7 +102,7 @@ contract FiatTokenV2Test is Test {
             )
         );
         vm.prank(burner);
-        fiatTokenV2.burnByBurner(101);
+        fiatTokenV2.burnByBurnerOnly(101);
     }
 
     function testBurnByBurnerUnauthorized() public {
@@ -119,7 +119,7 @@ contract FiatTokenV2Test is Test {
             )
         );
         vm.prank(unauthorized);
-        fiatTokenV2.burnByBurner(100);
+        fiatTokenV2.burnByBurnerOnly(100);
     }
 
     function testBurnerPause() public {
@@ -130,7 +130,7 @@ contract FiatTokenV2Test is Test {
         // when contract is paused, not allowed to burn
         vm.expectRevert(Pausable.EnforcedPause.selector);
         vm.prank(burner);
-        fiatTokenV2.burnByBurner(100);
+        fiatTokenV2.burnByBurnerOnly(100);
     }
 
     function testBlacklistBurner() public {
@@ -154,7 +154,7 @@ contract FiatTokenV2Test is Test {
         // not allowed to burn
         vm.expectRevert(abi.encodeWithSelector(CallerBlacklisted.selector, burner));
         vm.prank(burner);
-        fiatTokenV2.burnByBurner(100);
+        fiatTokenV2.burnByBurnerOnly(100);
     }
 
     function testUnblacklistBurner() public {
@@ -176,7 +176,7 @@ contract FiatTokenV2Test is Test {
         assertEq(fiatTokenV2.isBlacklisted(burner), false);
         // once unblacklisted, allowed to burn
         vm.prank(burner);
-        fiatTokenV2.burnByBurner(100);
+        fiatTokenV2.burnByBurnerOnly(100);
         // no balance left after transferring and burning
         assertEq(fiatTokenV2.balanceOf(burner), 0);
     }

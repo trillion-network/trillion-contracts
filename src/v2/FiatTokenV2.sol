@@ -7,7 +7,9 @@ import "../v1/FiatTokenV1.sol";
 contract FiatTokenV2 is FiatTokenV1 {
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
 
-    function burnByBurner(uint256 value) public onlyRole(BURNER_ROLE) {
+    // burnByBurnerOnly is a token burn operation that can only be called by BURNER_ROLE
+    // this is to separate the operation from MINTER_ROLE that can call mint and burn function
+    function burnByBurnerOnly(uint256 value) public virtual onlyRole(BURNER_ROLE) {
         _burn(_msgSender(), value);
     }
 
