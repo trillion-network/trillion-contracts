@@ -12,11 +12,10 @@ import {IERC20Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.so
 import {ERC20CappedUpgradeable} from
     "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20CappedUpgradeable.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
-import {Upgrades, Options} from "openzeppelin-foundry-upgrades/Upgrades.sol";
+import {Upgrades} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {CallerBlacklisted} from "../../src/v1/BlacklistableV1.sol";
 import {Ramen} from "../../src/mocks/Ramen.sol";
-// import {FiatTokenV99} from "../../src/mocks/FiatTokenV99.sol";
 
 // mock contract to test upgrades
 contract FiatTokenV99 is FiatTokenV1 {

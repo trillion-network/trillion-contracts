@@ -1,8 +1,8 @@
 {
-  "name": "@trillion-x/trillion-contracts",
+  "name": "trillion-contracts",
   "version": "1.0.0",
   "license": "MIT",
-  "repository": "git@github.com:royal-markets/royal-contracts.git",
+  "repository": "git@github.com:trillion-network/trillion-contracts.git",
   "files": [
     "out",
     "ts-types"
