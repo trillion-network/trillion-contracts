@@ -13,6 +13,9 @@ on:
       - remappings.txt
       - .github/workflows/gas-report.yml
 
+permissions:
+  pull-requests: write
+
 jobs:
   check:
     timeout-minutes: 30
