@@ -29,10 +29,10 @@ Install missing dependencies that are shown in the install output (ex: `brew ins
 foundryup
 ```
 
-Install the Solidity linter (`solhint`) we use, as a yarn dependency:
+Install the Solidity linter (`solhint`) we use, as a npm dependency:
 
 ```shell
-yarn install
+npm install
 ```
 
 Install the Slither static analysis tool (used to find vulnerabilities):
@@ -82,12 +82,12 @@ You can generate a quick coverage summary by running:
 forge coverage
 ```
 
-However, you likely may want to filter out "`*.s.sol`" script contracts and render a nice web UI to examine code coverage, which you can do using the `yarn` script I've written:
+However, you likely may want to filter out "`*.s.sol`" script contracts and render a nice web UI to examine code coverage, which you can do using the `npm` script I've written:
 
 > NOTE: This requires having `lcov` installed locally through homebrew.
 
 ```shell
-yarn coverage
+npm run coverage
 ```
 
 ### Code Formatting
@@ -103,7 +103,7 @@ forge fmt
 Solhint is a linter for our smart contracts. Run it like so:
 
 ```shell
-yarn lint
+npm run lint
 ```
 
 ### Static Analysis
@@ -128,7 +128,7 @@ forge snapshot
 
 Any smart contracts that need to be used as dependencies (for example, OpenZeppelin) - should be installed using `forge install`. This will install them as a `git submodule`.
 
-DO NOT use `yarn` to install smart contracts. The _only thing_ we use `yarn` for is to manage our Solidity linter `solhint`.
+DO NOT use `npm` to install smart contracts. The _only thing_ we use `npm` for is to manage our Solidity linter `solhint`.
 
 ```shell
 forge install

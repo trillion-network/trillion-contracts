@@ -1,10 +1,6 @@
 name: coverage
 
 on:
-  push:
-    branches: ["main"]
-    paths-ignore:
-      - README.md
   pull_request:
     branches: ["*"]
     paths-ignore:
@@ -43,7 +39,7 @@ jobs:
         # Filter out "script" contracts from coverage report
         run: |
           forge coverage --report lcov
-          lcov --remove ./lcov.info -o ./${{github.sha}}.lcov.info 'script'
+          lcov --remove ./lcov.info --rc derive_function_end_line=0 -o ./${{github.sha}}.lcov.info 'script'
         id: coverage-base
 
       - name: Archive base branch code coverage results
@@ -63,7 +59,7 @@ jobs:
         # Filter out "script" contracts from coverage report
         run: |
           forge coverage --report lcov
-          lcov --remove ./lcov.info -o ./${{github.event.pull_request.base.sha}}.lcov.info 'script'
+          lcov --remove ./lcov.info --rc derive_function_end_line=0 -o ./${{github.event.pull_request.base.sha}}.lcov.info 'script'
         id: coverage-head
 
       - name: Archive head branch code coverage results
@@ -79,9 +75,9 @@ jobs:
           name: ${{github.sha}}.lcov.info
 
       - name: Code Coverage Report
-        uses: romeovs/lcov-reporter-action@87a815f34ec27a5826abba44ce09bbc688da58fd
-        # The reason for using a hash rather than a version/tag, is the project
-        # failed in publishing this release: https://github.com/romeovs/lcov-reporter-action/issues/47
+        # use trillion-network/lcov-reporter-action
+        # to get fix for https://github.com/romeovs/lcov-reporter-action/pull/61
+        uses: trillion-network/lcov-reporter-action@v0.4.0
         with:
           lcov-file: ./${{github.event.pull_request.base.sha}}.lcov.info
           lcov-base: ./${{github.sha}}.lcov.info

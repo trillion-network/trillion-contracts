@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "solhint 'src/**/*.sol' && solhint --config .solhint.test.json 'test/**/*.t.sol'",
     "test": "forge test",
-    "coverage": "forge coverage --report lcov && lcov --remove ./lcov.info -o ./lcov.info 'test/*' 'script/*' && genhtml lcov.info --branch-coverage --output-dir coverage && open coverage/index.html"
+    "coverage": "forge coverage --report lcov && lcov --remove ./lcov.info --rc derive_function_end_line=0 -o ./lcov.info 'test/*' 'script/*' && genhtml lcov.info --rc derive_function_end_line=0 --ignore-errors category --output-dir coverage && open coverage/index.html"
   },
   "devDependencies": {
     "solhint": "^5.0.3"
