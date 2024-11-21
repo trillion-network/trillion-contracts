@@ -13,6 +13,9 @@ on:
 env:
   FOUNDRY_PROFILE: ci
 
+permissions:
+  pull-requests: write
+
 jobs:
   check:
     timeout-minutes: 30
