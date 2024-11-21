@@ -15,6 +15,7 @@ docs/
 
 # Dotenv file
 .env
+.env.*
 
 # Node modules
 node_modules/
@@ -24,6 +25,7 @@ node_modules/
 !.yarn/releases
 !.yarn/plugins
 .pnp.*
+yarn.lock
 
 # DS Store files
 **/.DS_Store

@@ -27,16 +27,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "yarn"
+          node-version: 22
+          cache: "npm"
           registry-url: "https://registry.npmjs.org"
           scope: "@trillion-x"
 
       # Publish ABIs to NPM
       - name: Publish to NPM
         run: |
-          yarn config set version-git-tag false
-          yarn version --new-version $(git describe --tags)
-          yarn publish
+          npm config set version-git-tag false
+          npm version --new-version $(git describe --tags)
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
