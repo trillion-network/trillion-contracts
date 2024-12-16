@@ -34,3 +34,4 @@ yarn.lock
 coverage/
 lcov.info
 **/*.env
+!.env.example
