@@ -33,3 +33,4 @@ yarn.lock
 # coverage stuff
 coverage/
 lcov.info
+**/*.env
